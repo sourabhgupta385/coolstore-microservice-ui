@@ -1,0 +1,41 @@
+{
+  "author": "Red Hat",
+  "contributors": [
+    "James Falkner <jfalkner@redhat.com> (https://developers.redhat.com)"
+  ],
+  "name": "coolstore-ui",
+  "repository": "jbossdemocentral/coolstore-microservice",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "description": "A JBoss Developer retail demo featuring a pricing microservice, angular UI microservice, protected by Red Hat SSO",
+  "homepage": "https://developers.redhat.com",
+  "dependencies": {
+    "cors": "^2.8.3",
+    "express": "^4.13.4",
+    "keycloak-connect": "^3.1.0",
+    "request": "^2.74.0"
+  },
+  "devDependencies": {
+    "bower": ">=1.7.9",
+    "bower-nexus3-resolver": "*",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^5.10.0",
+    "istanbul": "^0.4.4",
+    "mocha": "^3.0.0",
+    "mocha-junit-reporter": "^1.12.1",
+    "mongodb": "^2.2.5",
+    "sinon": "^1.17.5"
+  },
+  "engines": {
+    "node": ">=0.10.10"
+  },
+  "scripts": {
+    "postinstall": "node_modules/.bin/bower --config.registry.search=${BOWER_MIRROR} install",
+    "lint": "eslint -o quality.html -f html server.js",
+    "lint-console": "eslint server.js",
+    "test": "istanbul cover node_modules/.bin/_mocha -- test/*.js",
+    "coverage": "istanbul cover --report cobertura node_modules/.bin/_mocha -- test/*.js && mocha test/*.js --reporter mocha-junit-reporter --reporter-options mochaFile=./results/test-results.xml"
+  }
+}
