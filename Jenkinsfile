@@ -1,24 +1,25 @@
 node{
-    def NODEJS_HOME = tool "NODE_PATH"
-    env.PATH="${env.PATH}:${NODEJS_HOME}/bin"
+    /* def NODEJS_HOME = tool "NODE_PATH"
+    env.PATH="${env.PATH}:${NODEJS_HOME}/bin" */
    
     stage('First Time Deployment'){
         script{
             openshift.withCluster() {
                 openshift.withProject('coolstore-dev-sourabh') {
-                    def bcSelector = openshift.selector( "bc", "web-ui")
+                    sh "echo $foo"
+                    /* def bcSelector = openshift.selector( "bc", "web-ui")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
                         openshift.newApp("https://raw.githubusercontent.com/sourabhgupta385/coolstore-microservice/stable-ocp-3.9/openshift/coolstore-template.yaml")
                     } else {
                         sh 'echo build config already exists'  
-                    }
+                    } */
                 }
             }
         }
     }
     
-    stage('Install Dependecies'){
+    /* stage('Install Dependecies'){
         sh 'npm --prefix ../workspace@script/coolstore-ui install'
     }
     
@@ -47,7 +48,7 @@ node{
     }
     
     stage("Functional Testing"){
-        sh 'cd ../workspace@script/coolstore-ui && python functionalTest.py'
+        //sh 'cd ../workspace@script/coolstore-ui && python functionalTest.py'
         sh 'echo Function Testing' 
     }
    
@@ -58,5 +59,5 @@ node{
     
     stage("Tagging Image for Production"){
         openshiftTag(namespace: 'coolstore-dev-sourabh', srcStream: 'web-ui', srcTag: 'latest', destStream: 'web-ui', destTag: 'prod')
-    }
+    } */
 }
