@@ -13,3 +13,6 @@ objects:
         uri: "https://github.com/sourabhgupta385/coolstore-microservice-ui.git"
     strategy:
       jenkinsPipelineStrategy:
+        env:
+        -  name: foo
+           value: ${foo}
