@@ -7,6 +7,7 @@ node{
             openshift.withCluster() {
                 openshift.withProject('coolstore-dev-sourabh') {
                     sh "echo $foo"
+                    sh "echo $branch"
                     /* def bcSelector = openshift.selector( "bc", "web-ui")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
