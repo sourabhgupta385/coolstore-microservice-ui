@@ -1,13 +1,15 @@
-kind: "BuildConfig"
-apiVersion: "v1"
+apiVersion: v1
+kind: Template
 metadata:
-  name: "sample-pipeline"
-spec:
-  source:
-    git:
-      uri: "https://github.com/sourabhgupta385/coolstore-microservice-ui.git"
-  strategy:
-    jenkinsPipelineStrategy:
-      env:
-       - name: "FOO"
-         value: "BAR"
+  name: coolstore-pipeline-template
+objects:
+- kind: "BuildConfig"
+  apiVersion: "v1"
+  metadata:
+    name: "sample-pipeline12"
+  spec:
+    source:
+      git:
+        uri: "https://github.com/sourabhgupta385/coolstore-microservice-ui.git"
+    strategy:
+      jenkinsPipelineStrategy:
