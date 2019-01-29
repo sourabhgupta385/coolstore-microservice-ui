@@ -20,7 +20,7 @@ node{
     }
     
     stage('Install Dependecies'){
-        sh 'npm --prefix ../workspace@script install'
+        sh 'npm install'
     }
     
     stage("Checkout Source"){
@@ -28,17 +28,17 @@ node{
     }
     
     stage('Code Quality'){
-        sh 'npm --prefix ../workspace@script run lint'
+        sh 'npm run lint'
         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'quality.html', reportName: 'Quality Report', reportTitles: ''])
-        sh 'npm --prefix ../workspace@script run lint-console'
+        sh 'npm run lint-console'
     }
     
     stage("Unit Test"){
-        sh 'npm --prefix ../workspace@script run test'
+        sh 'npm run test'
     }
    
     stage("Code Coverage"){
-        sh 'npm --prefix ../workspace@script run coverage'
+        sh 'npm run coverage'
     }
 
     stage("Dev - Building Application"){
@@ -52,11 +52,11 @@ node{
     }
     
     stage("Functional Testing"){
-        sh 'cd ../workspace@script && python functionalTest.py'
+        sh 'python functionalTest.py'
     }
    
     stage("Load Testing"){
-        sh 'cd ../workspace@script && artillery run perfTest.yml'
+        sh 'artillery run perfTest.yml'
         
     }
     
