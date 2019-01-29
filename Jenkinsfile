@@ -35,6 +35,7 @@ node{
     
     stage("Unit Test"){
         sh 'npm run test'
+        sh 'npm run test-jenkins'
     }
    
     stage("Code Coverage"){
