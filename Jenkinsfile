@@ -19,12 +19,12 @@ node{
         }
     }
     
-    stage('Install Dependecies'){
-        sh 'npm install'
-    }
-    
     stage("Checkout Source"){
        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/sourabhgupta385/coolstore-microservice-ui.git']]])
+    }
+    
+    stage('Install Dependecies'){
+        sh 'npm install'
     }
     
     stage('Code Quality'){
