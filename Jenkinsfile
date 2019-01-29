@@ -10,7 +10,7 @@ node{
                     def bcSelector = openshift.selector( "bc", "web-ui")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
-                        openshift.newApp($APP_TEMPLATE_URL)
+                        openshift.newApp("$APP_TEMPLATE_URL")
                     } else {
                         sh 'echo build config already exists'  
                     } 
