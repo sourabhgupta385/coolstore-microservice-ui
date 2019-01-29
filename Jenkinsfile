@@ -20,27 +20,27 @@ node{
     }
     
     stage('Install Dependecies'){
-        sh 'npm  install'
+        sh 'npm --prefix ../workspace@script/coolstore-ui install'
     }
     
     stage('Code Quality'){
-        sh 'npm --prefix ../workspace@script/coolstore-ui run lint'
+        sh 'npm --prefix ../workspace@script run lint'
         //publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'quality.html', reportName: 'Quality Report', reportTitles: ''])
         sh 'npm --prefix ../workspace@script/coolstore-ui run lint-console'
     }
     
     stage("Unit Test"){
-        sh 'npm --prefix ../workspace@script/coolstore-ui run test'
+        sh 'npm --prefix ../workspace@script run test'
     }
    
     stage("Code Coverage"){
-        sh 'npm --prefix ../workspace@script/coolstore-ui run coverage'
+        sh 'npm --prefix ../workspace@script run coverage'
     }
 
     stage("Dev - Building Application"){
         script{
             openshift.withCluster() {
-                openshift.withProject('coolstore-dev-sourabh'){
+                openshift.withProject("$APP_NAME-dev"){
                     openshift.startBuild("web-ui")   
                 }
             }
@@ -48,16 +48,15 @@ node{
     }
     
     stage("Functional Testing"){
-        //sh 'cd ../workspace@script/coolstore-ui && python functionalTest.py'
-        sh 'echo Function Testing' 
+        sh 'cd ../workspace@script && python functionalTest.py'
     }
    
     stage("Load Testing"){
-        sh 'cd ../workspace@script/coolstore-ui && artillery run perfTest.yml'
+        sh 'cd ../workspace@script && artillery run perfTest.yml'
         
     }
     
     stage("Tagging Image for Production"){
-        openshiftTag(namespace: 'coolstore-dev-sourabh', srcStream: 'web-ui', srcTag: 'latest', destStream: 'web-ui', destTag: 'prod')
+        openshiftTag(namespace: '$APP_NAME-dev', srcStream: 'web-ui', srcTag: 'latest', destStream: 'web-ui', destTag: 'prod')
     } 
 }
