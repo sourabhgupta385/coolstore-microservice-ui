@@ -36,6 +36,7 @@
     "lint": "eslint -o quality.html -f html server.js",
     "lint-console": "eslint server.js",
     "test": "istanbul cover node_modules/.bin/_mocha -- test/*.js",
-    "coverage": "istanbul cover --report cobertura node_modules/.bin/_mocha -- test/*.js && mocha test/*.js --reporter mocha-junit-reporter --reporter-options mochaFile=./results/test-results.xml"
+    "coverage": "istanbul cover --report cobertura node_modules/.bin/_mocha -- test/*.js && mocha test/*.js --reporter mocha-junit-reporter --reporter-options mochaFile=./results/test-results.xml",
+    "test-jenkins": "JUNIT_REPORT_PATH=./results/test-results.xml mocha test/*.js --colors --reporter mocha-jenkins-reporter"
   }
 }
