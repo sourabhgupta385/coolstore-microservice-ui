@@ -1,4 +1,4 @@
-# Sample Openshift pipeline for Node + AngularJS microservice
+# Sample Openshift CI/CD pipeline for Node + AngularJS microservice
 
 ## Manual Deployment Instructions
 
