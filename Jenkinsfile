@@ -5,13 +5,12 @@ node{
     stage('First Time Deployment'){
         script{
             openshift.withCluster() {
-                openshift.withProject('coolstore-dev-sourabh') {
-                    sh "echo $foo-hello"
-                    sh "echo $branch"
+                openshift.withProject("$APP_NAME-dev") {
+                    sh "echo $APP_TEMPLATE_URL"
                     /* def bcSelector = openshift.selector( "bc", "web-ui")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
-                        openshift.newApp("https://raw.githubusercontent.com/sourabhgupta385/coolstore-microservice/stable-ocp-3.9/openshift/coolstore-template.yaml")
+                        openshift.newApp($APP_TEMPLATE_URL)
                     } else {
                         sh 'echo build config already exists'  
                     } */
