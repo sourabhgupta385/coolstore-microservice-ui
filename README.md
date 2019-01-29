@@ -37,6 +37,6 @@ $ oc process -f pipelineTemplate.yaml --param-file=parameters.txt | oc create -f
 
 ### 5. Start Pipeline
 
-'''
+```
 $ oc start-build coolstore-ui-pipeline -n coolstore-ui-cicd
-'''
+```
