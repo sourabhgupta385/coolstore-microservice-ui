@@ -1,18 +1,31 @@
-apiVersion: v1
 kind: Template
+apiVersion: v1
 metadata:
   name: coolstore-pipeline-template
 objects:
-- apiVersion: "v1" 
-  kind: "BuildConfig"
-  metadata:
-    name: "sample-pipeline12"
-  spec:
-    source:
-      git:
-        uri: "https://github.com/sourabhgupta385/coolstore-microservice-ui.git"
-    strategy:
-      jenkinsPipelineStrategy:
-        env:
-        -  name: foo
-           value: ${foo}
+  - kind: BuildConfig
+    apiVersion: v1 
+    metadata:
+      name: coolstore-ui-pipeline
+    spec:
+      source:
+        git:
+          uri: ${GIT_SOURCE_URL}
+      strategy:
+        jenkinsPipelineStrategy:
+          env:
+          -  name: APP_TEMPLATE_URL
+             value: ${GIT_TEMPLATE_URL}
+          -  name: APP_NAME
+             value: ${APPLICATION_NAME}    
+parameters:
+- description: Git source URL for application
+  displayName: Git source repository
+  name: GIT_SOURCE_URL
+  required: true
+- displayName: Git template URL for full aplication
+  name: GIT_TEMPLATE_URL
+  required: true
+- description: The name for the application.
+  name: APPLICATION_NAME
+  required: true
