@@ -23,6 +23,10 @@ node{
         sh 'npm --prefix ../workspace@script install'
     }
     
+    stage("Checkout Source"){
+       checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/sourabhgupta385/coolstore-microservice-ui.git']]])
+    }
+    
     stage('Code Quality'){
         sh 'npm --prefix ../workspace@script run lint'
         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'quality.html', reportName: 'Quality Report', reportTitles: ''])
