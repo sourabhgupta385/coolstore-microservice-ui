@@ -20,13 +20,13 @@ node{
     }
     
     stage('Install Dependecies'){
-        sh 'npm --prefix ../workspace@script/coolstore-ui install'
+        sh 'npm --prefix ../workspace@script install'
     }
     
     stage('Code Quality'){
         sh 'npm --prefix ../workspace@script run lint'
         //publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'quality.html', reportName: 'Quality Report', reportTitles: ''])
-        sh 'npm --prefix ../workspace@script/coolstore-ui run lint-console'
+        sh 'npm --prefix ../workspace@script run lint-console'
     }
     
     stage("Unit Test"){
