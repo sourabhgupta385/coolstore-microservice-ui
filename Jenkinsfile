@@ -33,9 +33,13 @@ node{
         sh 'npm run lint-console'
     }
     
-    stage("Unit Test"){
-        sh 'npm run test'
-        sh 'npm run test-jenkins'
+    try {
+         stage("Unit Test"){
+            sh 'npm run test'
+            sh 'npm run test-jenkins'
+        }
+    } finally {
+        junit '**/reports/test-results.xml'
     }
    
     stage("Code Coverage"){
@@ -65,10 +69,4 @@ node{
     stage("Tagging Image for Production"){
         openshiftTag(namespace: '$APP_NAME-dev', srcStream: 'web-ui', srcTag: 'latest', destStream: 'web-ui', destTag: 'prod')
     }
-    
-    post {
-      always {
-        junit '**/reports/test-results.xml'
-      }
-   }
 }
