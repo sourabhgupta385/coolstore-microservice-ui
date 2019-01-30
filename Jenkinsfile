@@ -39,7 +39,7 @@ node{
             sh 'npm run test-jenkins'
         }
     } finally {
-        junit './results/test-results.xml'
+        junit '**/results/test-results.xml'
     }
    
     stage("Code Coverage"){
