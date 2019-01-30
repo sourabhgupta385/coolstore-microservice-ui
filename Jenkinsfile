@@ -29,19 +29,14 @@ node{
     
     stage('Code Quality'){
         sh 'npm run lint'
-        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'quality.html', reportName: 'Quality Report', reportTitles: ''])
         sh 'npm run lint-console'
     }
-    
-    try {
-         stage("Unit Test"){
-            sh 'npm run test'
-            sh 'npm run test-jenkins'
-        }
-    } finally {
-        junit '**/results/test-results.xml'
-    }
    
+    stage("Unit Test"){
+         //sh 'npm run test'
+         sh 'npm run test-jenkins'
+    }
+    
     stage("Code Coverage"){
         sh 'npm run coverage'
         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: './results/', reportFiles: 'test-results.xml', reportName: 'Test Report', reportTitles: ''])
@@ -68,5 +63,10 @@ node{
     
     stage("Tagging Image for Production"){
         openshiftTag(namespace: '$APP_NAME-dev', srcStream: 'web-ui', srcTag: 'latest', destStream: 'web-ui', destTag: 'prod')
+    }
+    
+    stage("Publishing Reports"){
+        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'quality.html', reportName: 'Quality Report', reportTitles: ''])
+        junit '**/results/test-results.xml'
     }
 }
