@@ -64,5 +64,11 @@ node{
     
     stage("Tagging Image for Production"){
         openshiftTag(namespace: '$APP_NAME-dev', srcStream: 'web-ui', srcTag: 'latest', destStream: 'web-ui', destTag: 'prod')
-    } 
+    }
+    
+    post {
+      always {
+        junit '**/reports/test-results.xml'
+      }
+   }
 }
