@@ -39,7 +39,6 @@ node{
     
     stage("Code Coverage"){
         sh 'npm run coverage'
-        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: './results/', reportFiles: 'test-results.xml', reportName: 'Test Report', reportTitles: ''])
     }
 
     stage("Dev - Building Application"){
