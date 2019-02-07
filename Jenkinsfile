@@ -38,7 +38,7 @@ node{
         sh 'npm run coverage'
     }
 
-    stage("Dev - Building Application"){
+    /*stage("Dev - Building Application"){
         script{
             openshift.withCluster() {
                 openshift.withProject("$APP_NAME-dev"){
@@ -50,7 +50,7 @@ node{
     
     stage("Functional Testing"){
         sh 'python functionalTest.py'
-    }
+    }*/
    
     stage("Load Testing"){
         sh 'artillery run -o load.json perfTest.yml'
