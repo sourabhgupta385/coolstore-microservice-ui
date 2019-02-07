@@ -43,7 +43,7 @@ node{
         script{
             openshift.withCluster() {
                 openshift.withProject("$APP_NAME-dev"){
-                    openshift.startBuild("MS_NAME")   
+                    openshift.startBuild("$MS_NAME")   
                 }
             }
         }
