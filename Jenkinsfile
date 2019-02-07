@@ -28,7 +28,6 @@ node{
     
     stage('Code Quality'){
         sh 'npm run lint'
-        sh 'npm run lint-console'
     }
    
     stage("Unit Test"){
