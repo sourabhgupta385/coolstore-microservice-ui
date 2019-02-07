@@ -6,8 +6,7 @@ node{
         script{
             openshift.withCluster() {
                 openshift.withProject("$APP_NAME-dev") {
-                    sh "echo $APP_TEMPLATE_URL"
-                    def bcSelector = openshift.selector( "bc", "web-ui")
+                    def bcSelector = openshift.selector( "bc", "$MS_NAME")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
                         openshift.newApp("$APP_TEMPLATE_URL")
@@ -20,7 +19,7 @@ node{
     }
     
     stage("Checkout Source"){
-       checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/sourabhgupta385/coolstore-microservice-ui.git']]])
+       checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: "$MS_SOURCE_URL"]]])
     }
     
     stage('Install Dependecies'){
@@ -33,8 +32,7 @@ node{
     }
    
     stage("Unit Test"){
-         //sh 'npm run test'
-         sh 'npm run test-jenkins'
+         sh 'npm run test'
     }
     
     stage("Code Coverage"){
@@ -45,7 +43,7 @@ node{
         script{
             openshift.withCluster() {
                 openshift.withProject("$APP_NAME-dev"){
-                    openshift.startBuild("web-ui")   
+                    openshift.startBuild("MS_NAME")   
                 }
             }
         }
@@ -61,7 +59,7 @@ node{
     }
     
     stage("Tagging Image for Production"){
-        openshiftTag(namespace: '$APP_NAME-dev', srcStream: 'web-ui', srcTag: 'latest', destStream: 'web-ui', destTag: 'prod')
+        openshiftTag(namespace: '$APP_NAME-dev', srcStream: '$MS_NAME', srcTag: 'latest', destStream: '$MS_NAME', destTag: 'prod')
     }
     
     stage("Publishing Reports"){
