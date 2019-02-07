@@ -37,6 +37,6 @@
     "postinstall": "node_modules/.bin/bower --config.registry.search=${BOWER_MIRROR} install",
     "lint": "eslint -f html -o quality.html .",
     "test": "JUNIT_REPORT_PATH=./results/test-results.xml mocha test/*.js --colors --reporter mocha-jenkins-reporter",
-    "coverage": "istanbul cover mocha test/*.js"
+    "coverage": "istanbul cover --report html mocha test/*.js"
   }
 }
