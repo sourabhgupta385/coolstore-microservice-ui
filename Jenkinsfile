@@ -54,6 +54,7 @@ node{
    
     stage("Load Testing"){
         sh 'artillery run -o report.json perfTest.yml'
+        sh 'artillery report report.json'
         
     }
     
