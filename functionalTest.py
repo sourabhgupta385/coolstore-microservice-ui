@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import httplib, urllib, json
-HOST_NAME = "web-ui.coolstore-ui-test.svc"
+HOST_NAME = "web-ui.coolstore-ui-dev.svc"
 PORT = 8080
 test_count = 0
 table_content = ""
