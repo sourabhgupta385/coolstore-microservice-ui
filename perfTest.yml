@@ -1,5 +1,5 @@
 config:
-  target: 'http://web-ui-coolstore-ui-test.apps.na39.openshift.opentlc.com'
+  target: 'http://web-ui-coolstore-ui-dev.apps.na39.openshift.opentlc.com'
   phases:
     - duration: 10
       arrivalRate: 20
