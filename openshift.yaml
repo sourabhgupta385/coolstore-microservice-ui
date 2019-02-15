@@ -43,23 +43,138 @@ objects:
         kind: ImageStreamTag
         name: web-ui:latest
     source:
+      contextDir: coolstore-ui
       git:
-        ref: master
-        uri: https://github.com/sourabhgupta385/coolstore-microservice-ui
+        ref: ${GIT_REF}
+        uri: ${GIT_URI}
       type: Git
     strategy:
       sourceStrategy:
         env:
         - name: NPM_MIRROR
-          value: NPM_MIRROR
+          value: ${NPM_MIRROR}
         - name: BOWER_MIRROR
-          value: BOWER_MIRROR
+          value: ${BOWER_MIRROR}
         from:
           kind: ImageStreamTag
           name: nodejs:4
-          namespace: openshift
+          namespace: ${IMAGE_STREAM_NAMESPACE}
       type: Source
     triggers:
     - imageChange: {}
       type: ImageChange
     - type: ConfigChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: web-ui
+    labels:
+      app: web-ui
+  spec:
+    replicas: 1
+    selector:
+      app: web-ui
+      deploymentconfig: web-ui
+    strategy:
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: web-ui
+          deploymentconfig: web-ui
+      spec:
+        containers:
+        - env:
+          - name: COOLSTORE_GW_SERVICE
+            value: coolstore-gw
+          - name: HOSTNAME_HTTP
+            value: web-ui:8080
+          image: web-ui
+          imagePullPolicy: Always
+          name: web-ui
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5            
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - web-ui
+        from:
+          kind: ImageStreamTag
+          name: web-ui:latest
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: web-ui
+    name: web-ui
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: web-ui
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: web-ui
+  spec:
+    to:
+      kind: Service
+      name: web-ui
+parameters:
+- description: Git source URI for application
+  displayName: Git source repository
+  name: GIT_URI
+  required: true
+  value: https://github.com/sourabhgupta385/coolstore-microservice-ui
+- displayName: Git branch/tag reference
+  name: GIT_REF
+  required: true
+  value: master
+- description: Maven mirror url. If nexus is deployed locally, use nexus url (e.g. http://nexus.ci:8081/content/groups/public/)
+  displayName: Maven mirror url
+  name: MAVEN_MIRROR_URL
+- description: NPM mirror url. If nexus is deployed locally, use nexus url (e.g. http://nexus.ci:8081/repository/npm/)
+  displayName: NPM mirror url
+  name: NPM_MIRROR
+- description: Bower mirror url. If nexus is deployed locally, use nexus url (e.g. http://nexus.ci:8081/repository/bower-mirror/)
+  displayName: Bower mirror url
+  name: BOWER_MIRROR      
+- description: Namespace in which the ImageStreams for Red Hat Middleware images are installed. These ImageStreams are normally installed in the openshift namespace. You should only need to modify this if you've installed the ImageStreams in a different namespace/project.
+  displayName: ImageStream Namespace
+  value: openshift
+  name: IMAGE_STREAM_NAMESPACE
+  required: true  
