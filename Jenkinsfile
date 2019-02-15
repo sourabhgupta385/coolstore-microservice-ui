@@ -15,6 +15,28 @@ node{
                     } 
                 }
             }
+            openshift.withCluster() {
+                openshift.withProject("$APP_NAME-test") {
+                    def bcSelector = openshift.selector( "bc", "$MS_NAME")
+                    def bcExists = bcSelector.exists()
+                    if (!bcExists) {
+                        openshift.newApp("$APP_TEMPLATE_URL")
+                    } else {
+                        sh 'echo build config already exists'  
+                    } 
+                }
+            }
+            openshift.withCluster() {
+                openshift.withProject("$APP_NAME-prod") {
+                    def bcSelector = openshift.selector( "bc", "$MS_NAME")
+                    def bcExists = bcSelector.exists()
+                    if (!bcExists) {
+                        openshift.newApp("$APP_TEMPLATE_URL")
+                    } else {
+                        sh 'echo build config already exists'  
+                    } 
+                }
+            }
         }
     }
     
@@ -48,6 +70,18 @@ node{
         }
     }
     
+    stage("Tagging Image for Testing"){
+        openshiftTag(namespace: '$APP_NAME-dev', srcStream: '$MS_NAME', srcTag: 'latest', destStream: '$MS_NAME', destTag: 'test')
+    }
+    
+    stage("Tagging Image for Production"){
+        openshiftTag(namespace: '$APP_NAME-dev', srcStream: '$MS_NAME', srcTag: 'latest', destStream: '$MS_NAME', destTag: 'prod')
+    }
+    
+    stage("Test - Deploying Application"){
+       openshiftDeploy(namespace:'$APP_NAME-test', deploymentConfig: '$MS_NAME')
+    }
+ 
     stage("Functional Testing"){
         sh 'python functionalTest.py'
     }
@@ -58,8 +92,12 @@ node{
         
     }
     
-    stage("Tagging Image for Production"){
-        openshiftTag(namespace: '$APP_NAME-dev', srcStream: '$MS_NAME', srcTag: 'latest', destStream: '$MS_NAME', destTag: 'prod')
+    stage('Deploy to Production approval'){
+        input "Deploy to prod?"
+    }
+    
+    stage("Prod - Deploying Application"){
+       openshiftDeploy(namespace:'$APP_NAME-prod', deploymentConfig: '$MS_NAME')
     }
     
     stage("Publishing Reports"){
