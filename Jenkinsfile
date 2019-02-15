@@ -28,7 +28,7 @@ node{
                     def bcSelector = openshift.selector( "bc", "$MS_NAME")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
-                        openshift.newApp("$APP_TEMPLATE_URL")
+                        openshift.newApp("$APP_NAME-dev/$MS_NAME:test")
                     } else {
                         sh 'echo build config already exists in production'  
                     } 
