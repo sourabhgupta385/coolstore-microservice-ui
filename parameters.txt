@@ -1,4 +1,4 @@
 GIT_SOURCE_URL=https://github.com/sourabhgupta385/coolstore-microservice-ui.git
-GIT_TEMPLATE_URL=https://raw.githubusercontent.com/sourabhgupta385/coolstore-microservice/stable-ocp-3.9/openshift/coolstore-template.yaml
+GIT_TEMPLATE_URL=https://raw.githubusercontent.com/sourabhgupta385/coolstore-microservice-ui/master/openshift.yaml
 APPLICATION_NAME=coolstore-ui
 MICROSERVICE_NAME=web-ui
