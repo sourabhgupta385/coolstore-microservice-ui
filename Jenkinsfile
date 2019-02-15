@@ -10,7 +10,7 @@ node{
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
                         openshift.newApp("$APP_TEMPLATE_URL")
-                        sh 'sleep 150'
+                        sh 'sleep 220'
                         openshiftTag(namespace: '$APP_NAME-dev', srcStream: '$MS_NAME', srcTag: 'latest', destStream: '$MS_NAME', destTag: 'test')
                         openshiftTag(namespace: '$APP_NAME-dev', srcStream: '$MS_NAME', srcTag: 'latest', destStream: '$MS_NAME', destTag: 'prod')
                     } else {
@@ -24,6 +24,7 @@ node{
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
                         openshift.newApp("$APP_NAME-dev/$MS_NAME:test")
+                        sh 'sleep 100'
                     } else {
                         sh 'echo build config already exists in QA'  
                     } 
