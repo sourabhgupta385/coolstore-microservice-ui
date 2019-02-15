@@ -43,7 +43,6 @@ objects:
         kind: ImageStreamTag
         name: web-ui:latest
     source:
-      contextDir: coolstore-ui
       git:
         ref: ${GIT_REF}
         uri: ${GIT_URI}
