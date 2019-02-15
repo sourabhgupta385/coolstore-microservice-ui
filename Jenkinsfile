@@ -10,8 +10,11 @@ node{
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
                         openshift.newApp("$APP_TEMPLATE_URL")
+                        sh 'sleep 150'
+                        openshiftTag(namespace: '$APP_NAME-dev', srcStream: '$MS_NAME', srcTag: 'latest', destStream: '$MS_NAME', destTag: 'test')
+                        openshiftTag(namespace: '$APP_NAME-dev', srcStream: '$MS_NAME', srcTag: 'latest', destStream: '$MS_NAME', destTag: 'prod')
                     } else {
-                        sh 'echo build config already exists'  
+                        sh 'echo build config already exists in development'  
                     } 
                 }
             }
@@ -20,9 +23,9 @@ node{
                     def bcSelector = openshift.selector( "bc", "$MS_NAME")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
-                        openshift.newApp("$APP_TEMPLATE_URL")
+                        openshift.newApp("$APP_NAME-dev/$MS_NAME:test")
                     } else {
-                        sh 'echo build config already exists'  
+                        sh 'echo build config already exists in QA'  
                     } 
                 }
             }
@@ -31,9 +34,9 @@ node{
                     def bcSelector = openshift.selector( "bc", "$MS_NAME")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
-                        openshift.newApp("$APP_TEMPLATE_URL")
+                        openshift.newApp("$APP_NAME-dev/$MS_NAME:prod")
                     } else {
-                        sh 'echo build config already exists'  
+                        sh 'echo build config already exists in production'  
                     } 
                 }
             }
