@@ -15,20 +15,15 @@ node{
                         sh 'echo build config already exists in development'  
                     } 
                 }
-            }
-            openshift.withCluster() {
                 openshift.withProject("$APP_NAME-test") {
                     def bcSelector = openshift.selector( "bc", "$MS_NAME")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
                         openshift.newApp("$APP_TEMPLATE_URL")
-                        sh 'sleep 190'
                     } else {
                         sh 'echo build config already exists in QA'  
                     } 
                 }
-            }
-            openshift.withCluster() {
                 openshift.withProject("$APP_NAME-prod") {
                     def bcSelector = openshift.selector( "bc", "$MS_NAME")
                     def bcExists = bcSelector.exists()
